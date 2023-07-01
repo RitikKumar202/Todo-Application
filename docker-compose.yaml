@@ -1,0 +1,28 @@
+version: "3.8"
+services:
+  mongodb:
+    image: "mongo"
+    volumes:
+      - data:/data/db
+  backend:
+    build: ./Todo-back
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./Todo-back:/app
+      - /app/node_modules
+    depends_on:
+      - mongodb
+  frontend:
+    build: ./Todo-front
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./Todo-front/src:/app/src
+    stdin_open: true
+    tty: true
+    depends_on:
+      - backend
+
+volumes:
+  data:
